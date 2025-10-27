@@ -4053,6 +4053,7 @@ version = "0.1.0"
 dependencies = [
  "anchor-gen",
  "anchor-lang",
+ "solana-sdk",
 ]
 
 [[package]]
