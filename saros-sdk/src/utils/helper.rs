@@ -13,11 +13,15 @@ pub fn get_swap_pair_bin_array(
     pair: &Pubkey,
     program_id: &Pubkey,
 ) -> (Pubkey, Pubkey, Pubkey) {
+    // Use saturating math to avoid under/overflow when computing adjacent indices
+    let lower_index = bin_array_index.saturating_sub(1);
+    let upper_index = bin_array_index.saturating_add(1);
+
     let (bin_array_lower_pubkey, _) = Pubkey::find_program_address(
         &[
             b"bin_array".as_ref(),
             pair.as_ref(),
-            (bin_array_index - 1).to_le_bytes().as_ref(),
+            lower_index.to_le_bytes().as_ref(),
         ],
         program_id,
     );
@@ -34,7 +38,7 @@ pub fn get_swap_pair_bin_array(
         &[
             b"bin_array".as_ref(),
             pair.as_ref(),
-            (bin_array_index + 1).to_le_bytes().as_ref(),
+            upper_index.to_le_bytes().as_ref(),
         ],
         program_id,
     );
@@ -50,6 +54,8 @@ pub fn get_pair_bin_array(
     pair: &Pubkey,
     program_id: &Pubkey,
 ) -> (Pubkey, Pubkey) {
+    let upper_index = bin_array_index.saturating_add(1);
+
     let (bin_array_lower, _) = Pubkey::find_program_address(
         &[
             b"bin_array".as_ref(),
@@ -63,7 +69,7 @@ pub fn get_pair_bin_array(
         &[
             b"bin_array".as_ref(),
             pair.as_ref(),
-            (bin_array_index + 1).to_le_bytes().as_ref(),
+            upper_index.to_le_bytes().as_ref(),
         ],
         program_id,
     );
@@ -72,11 +78,14 @@ pub fn get_pair_bin_array(
 }
 
 pub fn get_swap_hook_bin_array(bin_array_index: u32, hook: Pubkey) -> (Pubkey, Pubkey, Pubkey) {
+    let lower_index = bin_array_index.saturating_sub(1);
+    let upper_index = bin_array_index.saturating_add(1);
+
     let (hook_bin_array_lower, _) = Pubkey::find_program_address(
         &[
             b"bin_array".as_ref(),
             hook.as_ref(),
-            (bin_array_index - 1).to_le_bytes().as_ref(),
+            lower_index.to_le_bytes().as_ref(),
         ],
         &rewarder_hook::ID,
     );
@@ -94,7 +103,7 @@ pub fn get_swap_hook_bin_array(bin_array_index: u32, hook: Pubkey) -> (Pubkey, P
         &[
             b"bin_array".as_ref(),
             hook.as_ref(),
-            (bin_array_index + 1).to_le_bytes().as_ref(),
+            upper_index.to_le_bytes().as_ref(),
         ],
         &rewarder_hook::ID,
     );
@@ -107,6 +116,8 @@ pub fn get_swap_hook_bin_array(bin_array_index: u32, hook: Pubkey) -> (Pubkey, P
 }
 
 pub fn get_hook_bin_array(bin_array_index: u32, hook: Pubkey) -> (Pubkey, Pubkey) {
+    let upper_index = bin_array_index.saturating_add(1);
+
     let (hook_bin_array_lower, _) = Pubkey::find_program_address(
         &[
             b"bin_array".as_ref(),
@@ -119,7 +130,7 @@ pub fn get_hook_bin_array(bin_array_index: u32, hook: Pubkey) -> (Pubkey, Pubkey
         &[
             b"bin_array".as_ref(),
             hook.as_ref(),
-            (bin_array_index + 1).to_le_bytes().as_ref(),
+            upper_index.to_le_bytes().as_ref(),
         ],
         &HOOK_PROGRAM_ID,
     );
