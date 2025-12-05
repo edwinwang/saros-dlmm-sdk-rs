@@ -12,6 +12,7 @@ use jupiter_amm_interface::{
 };
 use saros_sdk::utils::helper::{get_hook_bin_array, get_pair_bin_array, get_swap_pair_bin_array};
 use saros_sdk::{
+    constants::HOOK_PROGRAM_ID,
     instruction::{CreatePositionParams, ModifierPositionParams},
     math::{
         fees::{
@@ -449,7 +450,7 @@ impl Amm for SarosDlmm {
 
         // If pair does not have hook, hook should be pair key (dummy)
         account_metas.push(AccountMeta::new(self.hook, false));
-        account_metas.push(AccountMeta::new_readonly(rewarder_hook::ID, false));
+        account_metas.push(AccountMeta::new_readonly(HOOK_PROGRAM_ID, false));
         // This expect as the last of swap instruction
         account_metas.push(AccountMeta::new_readonly(self.event_authority, false));
         account_metas.push(AccountMeta::new_readonly(self.program_id, false));
